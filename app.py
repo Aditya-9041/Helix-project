@@ -13,46 +13,358 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS for styling
+# Custom CSS matching project.html design
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
     :root {
-        --green: #00ff88;
-        --red: #ff3366;
-        --orange: #ffaa00;
+        --g: #00ff88;
+        --r: #ff3366;
+        --a: #ffaa00;
+        --b: #00aaff;
         --bg: #04040a;
+        --s1: #080812;
+        --s2: #0c0c1a;
+        --bd: #ffffff14;
     }
-    .main {
-        background-color: #0a0a12;
-        color: #ffffff;
+    
+    body, .stApp {
+        background: var(--bg) !important;
+        color: #fff !important;
+        font-family: 'Space Grotesk', sans-serif !important;
     }
-    .stTextArea {
-        background-color: #080812 !important;
+    
+    .stApp {
+        background-color: #04040a !important;
+        background-image: 
+            linear-gradient(#ffffff14 1px, transparent 1px),
+            linear-gradient(90deg, #ffffff14 1px, transparent 1px),
+            linear-gradient(90deg, transparent 0%, rgba(0, 255, 136, 0.05) 50%, transparent 100%);
+        background-size: 40px 40px, 40px 40px, 100% 100%;
+        background-position: 0 0, 0 0, 0 0;
     }
-    .metric-box {
-        background-color: #0c0c1a;
-        border: 1px solid #ffffff14;
+    
+    /* Remove Streamlit default styling */
+    .stTextArea textarea {
+        background-color: var(--s1) !important;
+        border: 1px solid var(--bd) !important;
+        border-radius: 13px !important;
+        color: #e8e8ff !important;
+        font-family: 'Space Grotesk', sans-serif !important;
+        font-size: 14px !important;
+        line-height: 1.8 !important;
+        padding: 16px 18px 12px !important;
+    }
+    
+    .stButton button {
+        background-color: var(--g) !important;
+        color: #04040a !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        border: none !important;
+        border-radius: 7px !important;
+        transition: all 0.1s !important;
+    }
+    
+    .stButton button:hover {
+        transform: translateY(-1px) !important;
+        background-color: #00ff99 !important;
+    }
+    
+    .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 2.5rem;
+    }
+    
+    .logo-icon {
+        width: 36px;
+        height: 36px;
+        border: 1.5px solid var(--g);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: logopulse 2s ease-in-out infinite;
+        font-size: 20px;
+    }
+    
+    @keyframes logopulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+        50% { box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); }
+    }
+    
+    .logo-name {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+    }
+    
+    .logo-name span {
+        color: var(--g);
+    }
+    
+    .logo-chip {
+        font-family: 'Space Mono', monospace;
+        font-size: 9px;
+        background: #00ff8812;
+        color: var(--g);
+        border: 1px solid #00ff8830;
+        padding: 3px 8px;
+        border-radius: 4px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1.0;
+        letter-spacing: -0.05em;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-sub {
+        font-size: 14px;
+        color: #ffffff66;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        max-width: 600px;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+    }
+    
+    .stat-box {
+        background: var(--s1);
+        border: 1px solid var(--bd);
         border-radius: 10px;
         padding: 20px;
         text-align: center;
+        transition: transform 0.15s;
     }
-    .verified {
-        border-left: 4px solid #00ff88;
-        background-color: #00ff8805;
+    
+    .stat-box:hover {
+        transform: translateY(-2px);
     }
-    .hallucination {
-        border-left: 4px solid #ff3366;
-        background-color: #ff336605;
+    
+    .stat-box.verified {
+        border-color: #00ff8822;
     }
-    .unverified {
-        border-left: 4px solid #ffaa00;
-        background-color: #ffaa0005;
+    
+    .stat-box.unverified {
+        border-color: #ffaa0022;
     }
-    .claim-card {
-        padding: 15px;
+    
+    .stat-box.hallucination {
+        border-color: #ff336622;
+    }
+    
+    .stat-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #ffffff33;
+        margin-bottom: 6px;
+    }
+    
+    .stat-number {
+        font-family: 'Space Mono', monospace;
+        font-size: 32px;
+        font-weight: 700;
         margin: 10px 0;
-        border-radius: 10px;
+    }
+    
+    .stat-number.green { color: var(--g); }
+    .stat-number.orange { color: var(--a); }
+    .stat-number.red { color: var(--r); }
+    .stat-number.white { color: #fff; }
+    
+    .filter-btn {
+        background: transparent;
         border: 1px solid #ffffff14;
+        color: #ffffff44;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 100px;
+        cursor: pointer;
+        transition: all 0.15s;
+        margin-right: 8px;
+    }
+    
+    .filter-btn:hover {
+        border-color: #ffffff44;
+        color: #ffffff99;
+        background: #ffffff08;
+    }
+    
+    .claim-card {
+        background: var(--s1);
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        padding: 16px;
+        overflow: hidden;
+        transition: border-color 0.2s;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        margin: 8px 0;
+    }
+    
+    .claim-card.verified {
+        border-left: 3px solid var(--g);
+    }
+    
+    .claim-card.unverified {
+        border-left: 3px solid var(--a);
+    }
+    
+    .claim-card.hallucination {
+        border-left: 3px solid var(--r);
+    }
+    
+    .claim-card:hover {
+        border-color: #ffffff22;
+    }
+    
+    .claim-info {
+        flex: 1;
+    }
+    
+    .claim-tags {
+        display: flex;
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+    
+    .tag {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-family: 'Space Mono', monospace;
+        display: inline-block;
+    }
+    
+    .tag.verified {
+        background: #00ff8818;
+        color: var(--g);
+        border: 1px solid #00ff8830;
+    }
+    
+    .tag.unverified {
+        background: #ffaa0018;
+        color: var(--a);
+        border: 1px solid #ffaa0030;
+    }
+    
+    .tag.hallucination {
+        background: #ff336618;
+        color: var(--r);
+        border: 1px solid #ff336630;
+    }
+    
+    .claim-text {
+        font-size: 13px;
+        color: #ffffffcc;
+        line-height: 1.6;
+        margin: 8px 0;
+    }
+    
+    .claim-analysis {
+        font-size: 12px;
+        color: #ffffff99;
+        margin: 8px 0;
+        padding-top: 8px;
+        border-top: 1px solid #ffffff0a;
+    }
+    
+    .claim-source {
+        font-size: 11px;
+        color: var(--g);
+        margin-top: 8px;
+    }
+    
+    .claim-source a {
+        color: var(--g);
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+    
+    .claim-source a:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+    
+    .confidence-display {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        min-width: 70px;
+    }
+    
+    .confidence-percent {
+        font-family: 'Space Mono', monospace;
+        font-size: 28px;
+        font-weight: 700;
+    }
+    
+    .confidence-percent.verified { color: var(--g); }
+    .confidence-percent.unverified { color: var(--a); }
+    .confidence-percent.hallucination { color: var(--r); }
+    
+    .confidence-label {
+        font-size: 10px;
+        color: #ffffff77;
+        font-family: 'Space Mono', monospace;
+    }
+    
+    .divider {
+        border-bottom: 1px solid var(--bd);
+        margin: 20px 0;
+    }
+    
+    .footer {
+        text-align: center;
+        color: #ffffff66;
+        font-size: 12px;
+        margin-top: 30px;
+    }
+    
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem;
+    }
+    
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .claim-card {
+            flex-direction: column;
+        }
+        
+        .hero-title {
+            font-size: 1.8rem;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -72,7 +384,6 @@ def extract_claim_candidates(full_text):
         if len(s) < 25 or len(s) > 500:
             continue
         
-        # Check if sentence has verifiable content
         if not re.search(r'\b(\d{4}|\d+\s*%|\d+\s*(meter|km|miles?|ft|kg|°C|percent)|first|largest|smallest|most|tallest|never|always|only|invented|proved|cause|linked|visible|brain|vaccine|Einstein|Napoleon|Eiffel|Everest|speed of light)\b', s, re.IGNORECASE):
             continue
         
@@ -156,10 +467,8 @@ def analyze_claim_with_extract(claim_text, wiki_data):
     extract = wiki_data['extract'].lower()
     claim_lower = claim_text.lower()
     
-    # Check for contradictions
     is_contradicted = bool(re.search(r'myth|false|incorrect|not visible|cannot be seen|debunked|no evidence|does not exist|not true|actually', extract, re.IGNORECASE))
     
-    # Check for direct support
     positive_indicators = ["is", "was built", "stands", "confirmed", "has", "measured", "reaches", "located", "known as", "exactly"]
     supports_direct = any(ind in extract for ind in positive_indicators) and len(extract) > 80
     
@@ -170,21 +479,21 @@ def analyze_claim_with_extract(claim_text, wiki_data):
     if is_contradicted:
         status = 'hallucination'
         confidence = 24
-        reasoning = f'Wikipedia contradicts this: "{extract[:200]}"'
+        reasoning = f'Wikipedia contradicts this claim. Source indicates misinformation.'
     elif supports_direct:
         status = 'verified'
         confidence = 85
-        reasoning = f'Wikipedia supports this: "{extract[:200]}"'
+        reasoning = f'Wikipedia confirms key aspects of this claim.'
     else:
         overlap_score = len([w for w in extract.split() if w in claim_lower and len(w) > 4])
         if overlap_score > 2 and len(extract) > 200:
             status = 'verified'
             confidence = 68
-            reasoning = f'Wikipedia provides related context: "{extract[:200]}"'
+            reasoning = f'Wikipedia provides supporting contextual information.'
         else:
             status = 'unverified'
             confidence = 38
-            reasoning = f'Limited evidence found: "{extract[:200]}"'
+            reasoning = f'Limited supporting evidence found. Claim may be too specific.'
     
     return {
         'status': status,
@@ -194,14 +503,12 @@ def analyze_claim_with_extract(claim_text, wiki_data):
 
 def verify_claim_live(claim_text):
     """Verify a single claim"""
-    # Try Wikipedia first
     wiki_evidence = fetch_wikipedia_evidence(claim_text)
     
     if wiki_evidence.get('found'):
         analysis = analyze_claim_with_extract(claim_text, wiki_evidence)
         sources = [{'title': wiki_evidence['title'], 'url': wiki_evidence['url']}]
     else:
-        # Try web search as fallback
         web_evidence = fetch_web_evidence(claim_text)
         if web_evidence.get('found'):
             extract = web_evidence['extract'].lower()
@@ -211,13 +518,13 @@ def verify_claim_live(claim_text):
                 analysis = {
                     'status': 'hallucination',
                     'confidence': 28,
-                    'reasoning': f'Web search found contradictions: "{web_evidence["extract"][:200]}"'
+                    'reasoning': 'Web search found contradictions to this claim.'
                 }
             else:
                 analysis = {
                     'status': 'unverified',
                     'confidence': 35,
-                    'reasoning': f'Web search found: "{web_evidence["extract"][:200]}"'
+                    'reasoning': 'Web search found related but limited information.'
                 }
             sources = [{'title': web_evidence['title'], 'url': web_evidence['url']}]
         else:
@@ -238,25 +545,43 @@ def verify_claim_live(claim_text):
         'sources': sources
     }
 
-# UI Layout
-st.markdown("# 🔍 TruFact")
-st.markdown("### Hallucination Audit Trail for LLM-Generated Documents")
-st.markdown("---")
+# Main UI
+st.markdown('<div class="container">', unsafe_allow_html=True)
+
+# Logo section
+st.markdown("""
+<div class="logo-section">
+    <div class="logo-icon">🔍</div>
+    <div style="flex: 1;">
+        <div class="logo-name">Tru<span>Fact</span></div>
+        <div class="logo-chip">Real-time Audit Engine</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# Hero section
+st.markdown("""
+<div class="hero-title">
+    Hallucination Audit Trail<br>for LLM-Generated Documents
+</div>
+<div class="hero-sub">
+    Verify claims in AI-generated text by searching Wikipedia and the web for factual accuracy. Get real-time hallucination detection with confidence scoring.
+</div>
+""", unsafe_allow_html=True)
 
 # Input section
-col1, col2 = st.columns([4, 1])
+col1, col2 = st.columns([5, 1])
 with col1:
     user_text = st.text_area(
         "Paste your text here to audit for hallucinations:",
-        height=180,
+        height=150,
         placeholder="Enter text with claims to verify...",
         label_visibility="collapsed"
     )
 
 with col2:
     st.write("")
-    st.write("")
-    audit_button = st.button("🔍 AUDIT", use_container_width=True, key="audit_btn")
+    audit_button = st.button("🔍 AUDIT", use_container_width=True, key="audit_btn", help="Click to analyze claims")
 
 # Process and display results
 if audit_button and user_text:
@@ -264,54 +589,87 @@ if audit_button and user_text:
         claims = extract_claim_candidates(user_text)
         
         if not claims:
-            st.warning("⚠️ No verifiable claims found in the text. Add specific facts with dates, numbers, or well-known entities.")
+            st.warning("⚠️ No verifiable claims found. Add specific facts with dates, numbers, or well-known entities.")
         else:
             results = []
             progress_bar = st.progress(0)
+            status_text = st.empty()
             
             for idx, claim in enumerate(claims):
+                status_text.text(f"Analyzing claim {idx + 1}/{len(claims)}...")
                 result = verify_claim_live(claim)
                 results.append(result)
                 progress_bar.progress((idx + 1) / len(claims))
             
-            st.markdown("---")
+            status_text.empty()
+            progress_bar.empty()
+            
+            st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
             
             # Summary Statistics
-            col1, col2, col3, col4 = st.columns(4)
-            
             verified_count = len([r for r in results if r['status'] == 'verified'])
             unverified_count = len([r for r in results if r['status'] == 'unverified'])
             hallucination_count = len([r for r in results if r['status'] == 'hallucination'])
             avg_confidence = sum(r['confidence'] for r in results) / len(results) if results else 0
             
+            st.markdown(f"""
+            <div style="text-align: center; font-size: 12px; margin-bottom: 10px; color: #ffffff55;">
+                WEB AUDIT COMPLETE · {len(results)} CLAIMS ANALYZED
+            </div>
+            """, unsafe_allow_html=True)
+            
+            col1, col2, col3, col4 = st.columns(4)
+            
             with col1:
-                st.markdown('<div class="metric-box">', unsafe_allow_html=True)
-                st.metric("Total Claims", len(results))
-                st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown("""
+                <div class="stat-box">
+                    <div class="stat-label">TOTAL</div>
+                    <div class="stat-number white">""" + str(len(results)) + """</div>
+                </div>
+                """, unsafe_allow_html=True)
             
             with col2:
-                st.markdown('<div class="metric-box">', unsafe_allow_html=True)
-                st.metric("Verified ✓", verified_count)
-                st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown("""
+                <div class="stat-box verified">
+                    <div class="stat-label">VERIFIED</div>
+                    <div class="stat-number green">""" + str(verified_count) + """</div>
+                </div>
+                """, unsafe_allow_html=True)
             
             with col3:
-                st.markdown('<div class="metric-box">', unsafe_allow_html=True)
-                st.metric("Unverified ?", unverified_count)
-                st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown("""
+                <div class="stat-box unverified">
+                    <div class="stat-label">UNVERIFIED</div>
+                    <div class="stat-number orange">""" + str(unverified_count) + """</div>
+                </div>
+                """, unsafe_allow_html=True)
             
             with col4:
-                st.markdown('<div class="metric-box">', unsafe_allow_html=True)
-                st.metric("Hallucinations ✗", hallucination_count)
-                st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown("""
+                <div class="stat-box hallucination">
+                    <div class="stat-label">HALLUCINATIONS</div>
+                    <div class="stat-number red">""" + str(hallucination_count) + """</div>
+                </div>
+                """, unsafe_allow_html=True)
             
-            st.markdown("---")
-            st.metric("Average Confidence", f"{int(avg_confidence)}%")
+            st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
             
-            st.markdown("---")
-            st.subheader("📋 Detailed Results")
+            # Confidence bar
+            st.markdown(f"""
+            <div style="background: var(--s1); border: 1px solid var(--bd); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px;">
+                <div style="flex: 1;">
+                    <div style="font-size: 12px; color: #ffffff77; margin-bottom: 8px;">Avg Confidence</div>
+                    <div style="height: 5px; background: #ffffff0d; border-radius: 3px; overflow: hidden;">
+                        <div style="height: 100%; background: linear-gradient(90deg, var(--g), var(--b)); width: {int(avg_confidence)}%; border-radius: 3px; transition: width 1s;"></div>
+                    </div>
+                </div>
+                <div style="font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; color: var(--g); min-width: 50px; text-align: right;">{int(avg_confidence)}%</div>
+            </div>
+            """, unsafe_allow_html=True)
             
-            # Filter options
-            col1, col2, col3, col4 = st.columns(4)
+            # Filter section
+            st.markdown("**FILTER:**")
+            col1, col2, col3 = st.columns([1, 1, 1])
             with col1:
                 show_verified = st.checkbox("Verified", value=True)
             with col2:
@@ -319,49 +677,52 @@ if audit_button and user_text:
             with col3:
                 show_hallucinations = st.checkbox("Hallucinations", value=True)
             
+            st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+            
             # Display claims
+            st.markdown("### CLAIMS")
             for result in results:
                 if (result['status'] == 'verified' and not show_verified) or \
                    (result['status'] == 'unverified' and not show_unverified) or \
                    (result['status'] == 'hallucination' and not show_hallucinations):
                     continue
                 
-                status_color = 'verified' if result['status'] == 'verified' else \
-                              ('hallucination' if result['status'] == 'hallucination' else 'unverified')
+                status = result['status']
+                status_color = 'green' if status == 'verified' else ('orange' if status == 'unverified' else 'red')
+                status_label = 'Verified' if status == 'verified' else ('Unverified' if status == 'unverified' else 'Hallucination')
                 
-                with st.container():
-                    st.markdown(f"""
-                    <div class="claim-card {status_color}">
-                        <div style="display: flex; justify-content: space-between; align-items: start;">
-                            <div style="flex: 1;">
-                                <span style="display: inline-block; background: {'#00ff8820' if result['status'] == 'verified' else '#ffaa0020' if result['status'] == 'unverified' else '#ff336620'}; color: {'#00ff88' if result['status'] == 'verified' else '#ffaa00' if result['status'] == 'unverified' else '#ff3366'}; padding: 5px 10px; border-radius: 5px; font-weight: bold; margin-right: 10px;">
-                                    {result['category'].upper()}
-                                </span>
-                                <span style="display: inline-block; background: #ffffff10; padding: 5px 10px; border-radius: 5px; font-size: 12px;">
-                                    {result['status'].upper()}
-                                </span>
-                                <p style="margin-top: 10px; font-size: 14px; color: #ffffffcc;">
-                                    {result['text']}
-                                </p>
-                                <p style="margin-top: 10px; font-size: 12px; color: #ffffff99;">
-                                    <strong>Analysis:</strong> {result['reasoning']}
-                                </p>
-                                {f'<p style="margin-top: 8px; font-size: 11px; color: #00ff88;"><strong>Source:</strong> <a href="{result["sources"][0]["url"]}" target="_blank">{result["sources"][0]["title"]}</a></p>' if result['sources'] else ''}
-                            </div>
-                            <div style="text-align: center; margin-left: 20px;">
-                                <div style="font-size: 24px; font-weight: bold; color: {'#00ff88' if result['status'] == 'verified' else '#ffaa00' if result['status'] == 'unverified' else '#ff3366'};">
-                                    {result['confidence']}%
-                                </div>
-                                <div style="font-size: 11px; color: #ffffff77;">Confidence</div>
-                            </div>
+                source_html = ''
+                if result['sources']:
+                    source_html = f"""<div class="claim-source">
+                        <strong>Source:</strong> <a href="{result['sources'][0]['url']}" target="_blank">{result['sources'][0]['title']}</a>
+                    </div>"""
+                
+                st.markdown(f"""
+                <div class="claim-card {status}">
+                    <div class="claim-info">
+                        <div class="claim-tags">
+                            <span class="tag {status}">{status_label.upper()}</span>
+                            <span class="tag {status}">{result['category'].upper()}</span>
                         </div>
+                        <div class="claim-text">{result['text']}</div>
+                        <div class="claim-analysis">
+                            <strong>Analysis:</strong> {result['reasoning']}
+                        </div>
+                        {source_html}
                     </div>
-                    """, unsafe_allow_html=True)
+                    <div class="confidence-display">
+                        <div class="confidence-percent {status}">{result['confidence']}%</div>
+                        <div class="confidence-label">Confidence</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
 
-st.markdown("---")
+st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
 st.markdown("""
-<div style="text-align: center; color: #ffffff66; font-size: 12px; margin-top: 30px;">
-    <p>🔍 TruFact - Real-time Hallucination Detection | Powered by Wikipedia & Web Search</p>
-    <p style="margin-top: 10px;">Audit your AI-generated content for factual accuracy</p>
+<div class="footer">
+    <p>🔍 TruFact - Hallucination Audit Trail for LLM-Generated Documents</p>
+    <p style="margin-top: 10px; color: #ffffff44;">Powered by Wikipedia & Google Custom Search</p>
 </div>
 """, unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)
