@@ -329,13 +329,14 @@ Water boils at 100 degrees Celsius at sea level. Mount Everest is the tallest mo
         for (let raw of sentences) {
             let s = raw.trim();
             if (s.length < 25 || s.length > 500) continue;
-            if (!/\b(\d{4}|\d+\s*%|\d+\s*(meter|km|miles?|ft|kg|°C|percent)|first|largest|smallest|most|tallest|never|always|only|invented|proved|cause|linked|visible|brain|vaccine|Einstein|Napoleon|Eiffel|Everest|speed of light)\b/i.test(s)) continue;
+            // REMOVE THE RESTRICTIVE REGEX - accept more claims
+            // Old: if (!/\b(\d{4}|...\b/i.test(s)) continue;
             const key = s.slice(0, 65).toLowerCase();
             if (seen.has(key)) continue;
             seen.add(key);
             candidates.push(s);
         }
-        return candidates.slice(0, 18);
+        return candidates.slice(0, 50); // Increase from 18 to 50 (or more)
     }
 
     // Anim counter component
